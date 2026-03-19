@@ -1,0 +1,103 @@
+---
+title: I switched from f2fs to xfs
+description: Because why not
+---
+
+## Why?
+
+Back then I used to dualboot my older laptop which has HDD.
+You'd know how terrible Windows is with HDD. Everything takes
+literal ages to load.
+
+At that time I used btrfs 'cuz that's Fedora's default. After
+some research (not sure if a bit of Googling counts as research lol)
+on how I can make load time of apps faster, I concluded switching
+to ext4 seems to be the best idea. And actually it was since every
+app actually do load faster.
+
+In fact, the way btrfs work means it causes fragmentation, just like
+Windows' ntfs. In contrast ext4 doesn't as long as enough space
+is available. I can defrag with `btrfs defrag` or mounting it with
+`autodefrag` option in fstab, but eh, I'd rather use ext4 considering
+btrfs' performance penalty is also noticeable in HDD (not so in SSD).
+I ain't a filesystem expert so you guys can Google
+[why this is the case (click me and I'll google for you)](https://www.google.com/search?q=why+does+btrfs+causes+fragmentation+on+hdd+but+on+ext4+it+is+minimal)
+
+## Fast-forward to my current laptop...
+
+It has NVMe SSD, so
+you might be asking why not use btrfs on this new laptop? Well, it's
+more of an inertia, since I'm used to ext4. So naturally on fedora
+installer I chose ext4 instead of the default btrfs without thinking
+and then forget about this filesystem shenanigans.
+
+Then one day I found out Google switched from ext4 to f2fs for
+userdata partition on Android for devices' launched with Android 11.
+And since Android phones uses what PC's SSD uses (that is, NAND flash),
+I naturally thought it was better for my NVMe SSD, so I switched my
+partition from ext4 to f2fs. Turns out it was both right and wrong.
+
+**Why it was right?**
+
+1. It's faster for NVMe devices
+1. Better wear levelling (though nowadays NVMe controllers do an
+   excellent job on this, so this is almost redundant. Useful on
+   Android devices because they're usually bare NAND flash)
+
+**Why it was wrong?**
+
+1. f2fs is known to have higher corruption rate when there's
+   power loss. The `fsck.f2fs` tool is also not as mature as ext4.
+   It's been reported to sometimes cause more corruption (kinda
+   scary if you ask me tbh)
+
+And yeah these reasoning came after I suddenly got interested again
+in this topic, not when I switched to f2fs. Which is also when I
+discovered xfs. Out of fear of data corruption due to data loss,
+I switched to xfs. Although realistically for laptop users, power
+loss doesn't really matter unlike desktop user. But still, better
+safe than sorry. Recent benchmarks have also shown that xfs and ext4
+[is the fastest](https://www.phoronix.com/review/linux-70-filesystems/2).
+It doesn't really matter outside of high throughput
+application like servers, but there's no tradeoffs (in my opinion)
+compared to other FSes so why not?
+
+<br/>
+<sup>
+> Well to be pedantic, btrfs has snapshotting capability so that's
+a tradeoff, although I never needed to use it before, so I told myself
+that I don't need it.
+> 
+> Furthermore according to benchmarks, btrfs performed the slowest
+compared to ext4, f2fs and xfs. BUT BUT BUT don't let this stop you
+from using btrfs, for average user it does not matter and is not
+noticeable (well unless you use device that has HDD, especially low
+RPM ones), so you should give btrfs a go if you like being able to
+snapshot.
+</sup>
+
+## Some resources that I used (there's a lot more but I don't really remember)
+
+One thing worth noting is that when researching, I try to seek latest info
+because some articles are years old. The Linux kernel development moves fast
+and filesystems performance varies wildly between version. So yeah anyone
+reading this should keep that in mind too.
+
+- https://discussion.fedoraproject.org/t/which-is-better-for-ssd-ext4-or-f2fs-file-system/76296
+- https://www.phoronix.com/review/linux-615-filesystems
+- https://discussion.fedoraproject.org/t/brtfs-versus-ext4-for-a-external-backup-disk-with-smr/73176/8
+- https://wiki.archlinux.org/title/F2FS
+- https://wiki.archlinux.org/title/XFS
+- https://wiki.archlinux.org/title/Ext4
+- https://www.both.org/?p=13066
+- https://forum.endeavouros.com/t/xfs-ext4-or-btrfs-what-to-chose-for-speed-and-stability/60644
+- https://www.phoronix.com/review/linux-70-filesystems/2
+- https://commandlinux.com/statistics/file-system-performance-comparison-statistics-ext4-xfs-btrfs-zfs/
+
+## Disclaimer
+
+This is not AI-written. All by myself. In the age of AI slop I feel like I
+have to clarify this to avoid false accusations by people. smh
+
+Everything here is purely my opinion (well, mixed with some facts) so you
+should take it with a grain of salt and do your own research.
