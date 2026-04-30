@@ -9,7 +9,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: 'Hakimi\'s blog',
-      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/hakimifr' }],
+      social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/hakimifr/blog' }],
       customCss: ['./src/styles/custom.css'],
       sidebar: [
         // {
