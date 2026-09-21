@@ -1,5 +1,23 @@
 @import '@fontsource/noto-serif-grantha';
+@import '@fontsource/amiri-quran';
+
+@font-face {
+  font-family: 'KFGQPC Uthmanic Script HAFS';
+  src: url('/src/fonts/Uthmanic_Script_Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --sl-font: 'Noto Serif Grantha', serif;
+}
+
+:lang(ar) {
+  /* font-family: 'Amiri Quran', serif; */
+  font-family: 'KFGQPC Uthmanic Script HAFS', serif;
+  line-height: 2;
+  font-size: 2rem;
+  color: #ffea91;
+  direction: rtl;
 }
