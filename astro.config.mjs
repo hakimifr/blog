@@ -23,6 +23,10 @@ export default defineConfig({
           label: 'Blog Content',
           autogenerate: { directory: 'contents' },
         },
+        {
+          label: 'Random Stuff',
+          autogenerate: { directory: 'misc' },
+        },
       ],
     }),
   ],
